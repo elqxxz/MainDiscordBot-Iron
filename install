@@ -1,0 +1,3 @@
+npm init
+npm i discord.js
+npm i commandkit
