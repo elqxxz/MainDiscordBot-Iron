@@ -20,6 +20,6 @@ async function run({interaction, client}){
 
 /** @type {import('commandkit').CommandOptions} */
 const options = {
-    devOnly: true,
+    devOnly: false,
 };
 module.exports = { data, run, options}
