@@ -27,7 +27,8 @@ client.on('messageCreate', (message) => {
 });
 client.on('interactionCreate', async (interaction) => {
     //Log system
-
+    
+    //discord log in channel
     const LogChannel = client.guilds.cache.get(process.env.GUILD_ID).channels.cache.get(process.env.LOG_CHANNEL);
     if (interaction.commandName == 'ping' || interaction.commandName == 'help'){
         const LoggedReply = await interaction.fetchReply();

@@ -134,13 +134,13 @@ async function run ({interaction, client}){
       break;
     };
 
-    if (!interaction.values[0] === GirlRole || !interaction.values[0] === BoyRole) {
+    if (interaction.values[0] !== GirlRole || interaction.values[0] !== BoyRole) {
       interaction.reply({ embeds: [WrongRoleEmbed], ephemeral: true })
       VerifyResult = '🆔 Wrong role selected';
     };
     const selectedRole = interaction.guild.roles.cache.get(interaction.values[0])
     const SelectorEmbed = new EmbedBuilder()
-    .setTitle('Selector Log')
+    .setTitle('Verify Log')
     .addFields(
         {name:'Author', value:`${interaction.user}`},
         {name:'Selected', value:`${selectedRole}`},
