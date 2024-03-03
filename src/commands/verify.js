@@ -80,75 +80,97 @@ async function run ({interaction, client}){
   });
 
   collector.on("collect", (interaction) => {
+    var VerifyResult = null;
+
     if (!interaction.values.length) {
       interaction.reply({ embeds: [NoRolesSelectedEmbed], ephemeral: true });
+      return;
     };
 
-    var VerifyResult = null;
     const UnverifiedRole = process.env.UNVERIFIED_ROLE_ID;
     const BoyRole = process.env.BOY_ROLE_ID;
     const GirlRole = process.env.GIRL_ROLE_ID;
 
-    switch (interTargetCache.roles.cache.has(BoyRole) && interaction.values[0]){
-      case BoyRole:
-        interTargetCache.roles.remove(BoyRole);
-        interTargetCache.roles.add(UnverifiedRole);
-        interaction.reply({ embeds: [RemovedEmbed], ephemeral: true });
-        VerifyResult = '❌ Removed';
-      break;
-      case GirlRole:
-        interTargetCache.roles.remove(BoyRole);
-        interTargetCache.roles.add(GirlRole);
-        interaction.reply({ embeds: [ChangeEmbed], ephemeral: true });
-        VerifyResult = 'ℹ️ Changed';
-      break;
-    };
+    if (interaction.values[0] != BoyRole && interaction.values[0] != GirlRole) {
+      interaction.reply({ embeds: [WrongRoleEmbed], ephemeral: true });
+      console.log(interaction.values[0])
+      const DenieEmbed = new EmbedBuilder()
+      .setTitle('Verify Log')
+      .addFields(
+        {name:'Author', value:`${interaction.user}`},
+        {name:'Selected', value:'Wrong Role'},
+        {name:'Verify target', value:`${interTargetCache.user}`},
+        {name:'Result', value:'❌ Denied'}
+      )
 
-    switch (interTargetCache.roles.cache.has(GirlRole) && interaction.values[0]) {
-      case BoyRole:
-        interTargetCache.roles.remove(GirlRole);
-        interTargetCache.roles.add(BoyRole);
-        interaction.reply({ embeds: [ChangeEmbed], ephemeral: true });
-        VerifyResult = 'ℹ️ Changed';
-      break;
-      case GirlRole:
-        interTargetCache.roles.remove(GirlRole);
-        interTargetCache.roles.add(UnverifiedRole);
-        interaction.reply({ embeds: [RemovedEmbed], ephemeral: true });
-        VerifyResult = '❌ Removed';
-      break;
-    };
+      LogChannel.send({embeds: [DenieEmbed]});
+      return;
+    } 
+    else 
+    {
+      switch (interTargetCache.roles.cache.has(BoyRole) && interaction.values[0]){
+        case BoyRole:
+          interTargetCache.roles.remove(BoyRole);
+          interTargetCache.roles.add(UnverifiedRole);
+          interaction.reply({ embeds: [RemovedEmbed], ephemeral: true });
 
-    switch (interTargetCache.roles.cache.has(UnverifiedRole) && interaction.values[0]) {
-      case BoyRole:
-        interTargetCache.roles.remove(UnverifiedRole);
-        interTargetCache.roles.add(BoyRole);
-        interaction.reply({ embeds: [SuccessEmbed]});
-        VerifyResult = '✅ Success';
-      break;
-      case GirlRole:
-        interTargetCache.roles.remove(UnverifiedRole);
-        interTargetCache.roles.add(GirlRole);
-        interaction.reply({ embeds: [SuccessEmbed]});
-        VerifyResult = '✅ Success';
-      break;
-    };
+          VerifyResult = '❌ Removed';
+        break;
+        case GirlRole:
+          interTargetCache.roles.remove(BoyRole);
+          interTargetCache.roles.add(GirlRole);
+          interaction.reply({ embeds: [ChangeEmbed], ephemeral: true });
 
-    if (interaction.values[0] !== GirlRole || interaction.values[0] !== BoyRole) {
-      interaction.reply({ embeds: [WrongRoleEmbed], ephemeral: true })
-      VerifyResult = '🆔 Wrong role selected';
-    };
-    const selectedRole = interaction.guild.roles.cache.get(interaction.values[0])
-    const SelectorEmbed = new EmbedBuilder()
-    .setTitle('Verify Log')
-    .addFields(
+          VerifyResult = 'ℹ️ Changed';
+        break;
+      };
+
+      switch (interTargetCache.roles.cache.has(GirlRole) && interaction.values[0]) {
+        case BoyRole:
+          interTargetCache.roles.remove(GirlRole);
+          interTargetCache.roles.add(BoyRole);
+          interaction.reply({ embeds: [ChangeEmbed], ephemeral: true });
+
+          VerifyResult = 'ℹ️ Changed';  
+        break;
+        case GirlRole:
+          interTargetCache.roles.remove(GirlRole);
+          interTargetCache.roles.add(UnverifiedRole);
+          interaction.reply({ embeds: [RemovedEmbed], ephemeral: true });
+
+          VerifyResult = '❌ Removed';
+        break;
+      };
+
+      switch (interTargetCache.roles.cache.has(UnverifiedRole) && interaction.values[0]) {
+        case BoyRole:
+          interTargetCache.roles.remove(UnverifiedRole);
+          interTargetCache.roles.add(BoyRole);
+          interaction.reply({ embeds: [SuccessEmbed], ephemeral: true });
+
+          VerifyResult = '✅ Success';
+        break;
+        case GirlRole:
+          interTargetCache.roles.remove(UnverifiedRole);
+          interTargetCache.roles.add(GirlRole);
+          interaction.reply({ embeds: [SuccessEmbed], ephemeral: true });
+          
+          VerifyResult = '✅ Success';
+        break;
+      };
+    
+      const selectedRole = interaction.guild.roles.cache.get(interaction.values[0])
+      const SelectorEmbed = new EmbedBuilder()
+      .setTitle('Verify Log')
+      .addFields(
         {name:'Author', value:`${interaction.user}`},
         {name:'Selected', value:`${selectedRole}`},
         {name:'Verify target', value: `${interTargetCache.user}`},
         {name:'Result', value:`${VerifyResult}`}
       )
-    
-    LogChannel.send({embeds: [SelectorEmbed]});
+
+      LogChannel.send({embeds: [SelectorEmbed]});
+    };
   });
 };
 

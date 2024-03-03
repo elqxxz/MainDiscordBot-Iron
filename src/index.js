@@ -44,7 +44,6 @@ client.on('interactionCreate', async (interaction) => {
          .addFields(
              {name:'Author', value:`${interaction.user}`},
              {name:'Interacted with', value:`${interaction.commandName}`},
-             {name:'Bot reply', value: `${BotReply}`}
          );
 
         LogChannel.send({embeds: [InterLogEmbed]});
@@ -69,5 +68,7 @@ client.on('interactionCreate', async (interaction) => {
     });
     interaction.respond(results.slice(0, 2)).catch(() => {});
 })
-
+client.on('ready', ()=> {
+    console.log(`WAIT UNTIL SECOND SIGN BEFORE USING BOT`);
+})
 client.login(process.env.TOKEN)
