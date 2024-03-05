@@ -72,41 +72,31 @@ async function run({interaction}) {
      .setDescription(`${interTargetCache.user.displayName} doesn't have an avatar or banner`)
      .setColor(15548997);
     
+    const GetAvatarEmbed = new EmbedBuilder()
+     .setTitle('Graber Log')
+     .setFields(
+         {name:'Author', value:`${interaction.user}`},
+         {name:'What user got', value:`${type.name}`},
+         {name:'Grabbed from', value:`${interTargetCache.user}`}
+     );
+
     if (type.name === 'avatar') {
             console.log(`interacted with avatar\n-------------------------------------------------`)
         interaction.reply({ embeds: [SuccessAvatarEmbed], ephemeral: true })
-        const GetAvatarEmbed = new EmbedBuilder()
-        .setTitle('Graber Log')
-        .setFields(
-            {name:'Author', value:`${interaction.user}`},
-            {name:'What user got', value:`${type.name}`},
-            {name:'Grabbed from', value:`${interTargetCache.user}`}
-        )
+        
         LogChannel.send({embeds: [GetAvatarEmbed]})
         return;
     } else if (type.name === 'banner' && interTargetBanner !== undefined) {
             console.log(`interacted with banner\n-------------------------------------------------`);
         interaction.reply({ embeds: [SuccessBannerEmbed], ephemeral: true });
-        const GetAvatarEmbed = new EmbedBuilder()
-        .setTitle('Graber Log')
-        .setFields(
-            {name:'Author', value:`${interaction.user}`},
-            {name:'What user got', value:`${type.name}`},
-            {name:'Grabbed from', value:`${interTargetCache.user}`}
-        )
+        
         LogChannel.send({embeds: [GetAvatarEmbed]})
         return;
     } 
     else {
             console.log(`-------------------------------------------------`)
         interaction.reply({ embeds: [ErrorEmbed], ephemeral: true });
-        const GetAvatarEmbed = new EmbedBuilder()
-        .setTitle('Graber Log')
-        .setFields(
-            {name:'Author', value:`${interaction.user}`},
-            {name:'What user got', value:`${type.name}`},
-            {name:'Grabbed from', value:`${interTargetCache.user}`},
-        )
+        
         LogChannel.send({embeds: [GetAvatarEmbed]})
     };
 

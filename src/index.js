@@ -1,6 +1,9 @@
 require('dotenv').config();
 const {Client, IntentsBitField, EmbedBuilder} = require('discord.js');
+const {Routes} = require('discord-api-types/v9');
+const {Player} = require('discord-player')
 const {CommandKit} = require('commandkit');
+
 const OptionsData = require('../src/data/GraberOptions.json');
 
 const client = new Client({ 
@@ -9,6 +12,7 @@ const client = new Client({
         IntentsBitField.Flags.GuildMembers,
         IntentsBitField.Flags.GuildMessages,
         IntentsBitField.Flags.MessageContent,
+        IntentsBitField.Flags.GuildVoiceStates,
     ] 
 });
 
@@ -21,13 +25,23 @@ new CommandKit({
     bulkRegister: true,
 });
 
+client.player = new Player(client, {
+    ytdlOptions: {
+        quality: 'highestaudio',
+        highWaterMark: 1 << 25,
+        filter: (form) => {
+            if (form.bitrate && guildMember.voice.channel?.bitrate) return form.bitrate <= guildMember.voice.channel.bitrate;
+            return false;
+          },
+    },
+});
+
 
 client.on('messageCreate', (message) => {
     if (message.author.bot) return;
 });
 client.on('interactionCreate', async (interaction) => {
-    //Log system
-    
+
     //discord log in channel
     const LogChannel = client.guilds.cache.get(process.env.GUILD_ID).channels.cache.get(process.env.LOG_CHANNEL);
     if (interaction.commandName == 'ping' || interaction.commandName == 'help'){
@@ -71,4 +85,8 @@ client.on('interactionCreate', async (interaction) => {
 client.on('ready', ()=> {
     console.log(`WAIT UNTIL SECOND SIGN BEFORE USING BOT`);
 })
+client.on('error', error => {
+    console.error('The WebSocket encountered an error:', error);
+});
+
 client.login(process.env.TOKEN)

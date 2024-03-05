@@ -1,7 +1,6 @@
-/** @type {import('commandkit').CommandData} */
-
 const {EmbedBuilder} = require('discord.js');
 
+/** @type {import('commandkit').CommandData} */
 const data = {
     name: 'help',
     description: 'Contact information',
