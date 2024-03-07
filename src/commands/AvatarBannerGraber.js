@@ -80,8 +80,8 @@ async function run({interaction}) {
             GetAvatarEmbed
                 .setTitle('Graber Log')
                 .setFields(
-                    {name:'Where command used', value:`${interaction.channel}`},
-                    {name:'Author', value:`${interaction.user}`},
+                    {name:'Where command used', value:`${interaction.guild.name} - ${interaction.channel.name}: ${interaction.channel}`},
+                    {name:'Author', value:`${interaction.user.displayName}: ${interaction.user}`},
                     {name:'What user choosed', value:`${type.name}`},
                     {name:'Grabbed from', value:`${interTargetCache.user}`}
                 )
@@ -97,8 +97,8 @@ async function run({interaction}) {
             GetAvatarEmbed
                 .setTitle('Graber Log')
                 .setFields(
-                    {name:'Where command used', value:`${interaction.channel}`},
-                    {name:'Author', value:`${interaction.user}`},
+                    {name:'Where command used', value:`${interaction.guild.name} - ${interaction.channel.name}: ${interaction.channel}`},
+                    {name:'Author', value:`${interaction.user.displayName}: ${interaction.user}`},
                     {name:'What user choosed', value:`${type.name}`},
                     {name:'Grabbed from', value:`${interTargetCache.user}`}
                 )
@@ -115,8 +115,8 @@ async function run({interaction}) {
             GetAvatarEmbed
                 .setTitle('Graber Log')
                 .setFields(
-                    {name:'Where command used', value:`${interaction.channel}`},
-                    {name:'Author', value:`${interaction.user}`},
+                    {name:'Where command used', value:`${interaction.guild.name} - ${interaction.channel.name}: ${interaction.channel}`},
+                    {name:'Author', value:`${interaction.user.displayName}: ${interaction.user}`},
                     {name:'What user choosed', value:`${type.name}`},
                     {name:'Content', value:`user have no banner`},
                     {name:'Grabbed from', value:`${interTargetCache.user}`}

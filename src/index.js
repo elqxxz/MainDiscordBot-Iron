@@ -39,6 +39,11 @@ client.player = new Player(client, {
 
 client.on('messageCreate', (message) => {
     if (message.author.bot) return;
+    console.log(message);
+
+    const MessageTypesBlock = [6, 21]
+    if (MessageTypesBlock.includes(message.type)) return;
+    
     const MessageLog = new EmbedBuilder()
     const LogChannel = client.guilds.cache.get(process.env.GUILD_ID).channels.cache.get(process.env.LOG_CHANNEL);
     
@@ -48,8 +53,8 @@ client.on('messageCreate', (message) => {
             MessageLog
                 .setTitle('Interaction Log')
                 .setFields(
-                    {name: 'Where command used', value: `${message.channel}`},
-                    {name: 'Author', value: `${message.author}`},
+                    {name: 'Where command used', value: `${message.guild.name} - ${message.channel.name}: ${message.channel}`},
+                    {name: 'Author', value: `${message.author.displayName}: ${message.author}`},
                   )
                 .setImage(message.attachments.first().url)
                 .setThumbnail(message.guild.iconURL())
@@ -59,8 +64,8 @@ client.on('messageCreate', (message) => {
             MessageLog
                 .setTitle('Interaction Log')
                 .setFields(
-                    {name: 'Where command used', value: `${message.channel}`},
-                    {name: 'Author', value: `${message.author}`},
+                    {name: 'Where command used', value: `${message.guild.name} - ${message.channel.name}: ${message.channel}`},
+                    {name: 'Author', value: `${message.author.displayName}: ${message.author}`},
                     {name: 'Content', value: `${message.content}`}
                   )
                 .setImage(message.attachments.first().url)
@@ -72,8 +77,8 @@ client.on('messageCreate', (message) => {
             MessageLog
               .setTitle('Interaction Log')
               .setFields(
-                {name: 'Where command used', value: `${message.channel}`},
-                {name: 'Author', value: `${message.author}`},
+                {name: 'Where command used', value: `${message.guild.name} - ${message.channel.name}: ${message.channel}`},
+                {name: 'Author', value: `${message.author.displayName}: ${message.author}`},
                 {name: 'Content', value: `${message.content}`}
               )
               .setThumbnail(message.guild.iconURL())
@@ -119,7 +124,6 @@ client.on('ready', ()=> {
 })
 client.on('error', error => {
     console.error('The WebSocket encountered an error:', error);
-    interaction.reply({content: `ERROR: try once more`, ephemeral: true});
 });
 
 client.login(process.env.TOKEN)

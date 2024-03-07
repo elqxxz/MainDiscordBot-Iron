@@ -32,14 +32,11 @@ async function run ({interaction, client}){
   console.log(LogChannel.id)
 
   const interTargetID = interaction.options.get('user').value;
+  const TargetAvatar = (await interaction.options.getUser('user').fetch()).avatarURL();
   const interTargetCache = interaction.guild.members.cache.get(interTargetID);
   const interUserAvatar = interTargetCache.user.avatar;
   // Embeds
   const SuccessEmbed = new EmbedBuilder()
-    .setTitle("Verification")
-    .setThumbnail(`https://cdn.discordapp.com/avatars/${interTargetID}/${interUserAvatar}`)
-    .setDescription(`${interTargetCache.user} has been verified! \n\n verifier: ${interaction.user}`)
-    .setColor(5763719);
 
   const RemovedEmbed = new EmbedBuilder()
     .setTitle("Verification")
@@ -66,11 +63,15 @@ async function run ({interaction, client}){
     .setMinValues(0)
     .setMaxValues(1);
 
+  const VerificationEmbed = new EmbedBuilder()
+    .setTitle("Verification")
+    .setDescription(`${interTargetCache.user}`)
+    .setThumbnail(TargetAvatar)
       
     // Main
   const actionRow = new ActionRowBuilder().addComponents(roleMenu);
 
-  const reply = await interaction.reply({ components: [actionRow] });
+  const reply = await interaction.reply({embeds: [VerificationEmbed], components: [actionRow], ephemeral: true });
 
   const collector = reply.createMessageComponentCollector({
     ComponentType: ComponentType.RoleSelect,
@@ -146,14 +147,26 @@ async function run ({interaction, client}){
         case BoyRole:
           interTargetCache.roles.remove(UnverifiedRole);
           interTargetCache.roles.add(BoyRole);
-          interaction.reply({ embeds: [SuccessEmbed], ephemeral: true });
+          interaction.reply({ embeds: [
+            SuccessEmbed
+              .setTitle("Verification")
+              .setThumbnail(`https://cdn.discordapp.com/avatars/${interTargetID}/${interUserAvatar}`)
+              .setDescription(`${interTargetCache.user} has been verified! \n\n verifier: ${interaction.user}`)
+              .setColor(5763719)
+          ]});
 
           VerifyResult = '✅ Success';
         break;
         case GirlRole:
           interTargetCache.roles.remove(UnverifiedRole);
           interTargetCache.roles.add(GirlRole);
-          interaction.reply({ embeds: [SuccessEmbed], ephemeral: true });
+          interaction.reply({ embeds: [
+            SuccessEmbed
+              .setTitle("Verification")
+              .setThumbnail(`https://cdn.discordapp.com/avatars/${interTargetID}/${interUserAvatar}`)
+              .setDescription(`${interTargetCache.user} has been verified! \n\n verifier: ${interaction.user}`)
+              .setColor(5763719)
+          ]});
           
           VerifyResult = '✅ Success';
         break;
