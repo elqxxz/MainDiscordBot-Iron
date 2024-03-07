@@ -1,8 +1,8 @@
-const { YouTubeExtractor} = require("@discord-player/extractor");
+const {SpotifyExtractor} = require("@discord-player/extractor");
 const { useMainPlayer } = require('discord-player');
 const player = useMainPlayer();
 
-player.extractors.register(YouTubeExtractor);
+player.extractors.register(SpotifyExtractor);
 
 const { EmbedBuilder } = require('@discordjs/builders');
 

@@ -4,7 +4,6 @@ const {Routes} = require('discord-api-types/v9');
 const {Player} = require('discord-player')
 const {CommandKit} = require('commandkit');
 
-
 const OptionsData = require('../src/data/GraberOptions.json');
 
 const client = new Client({ 

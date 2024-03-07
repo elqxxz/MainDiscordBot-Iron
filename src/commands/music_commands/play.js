@@ -1,10 +1,10 @@
 const {EmbedBuilder, SlashCommandBuilder} = require('discord.js');
 const {QueryType} = require('discord-player');
-const { YouTubeExtractor} = require("@discord-player/extractor");
+const {SpotifyExtractor} = require("@discord-player/extractor");
 const { useMainPlayer } = require('discord-player');
 const player = useMainPlayer();
 
-player.extractors.register(YouTubeExtractor);
+player.extractors.register(SpotifyExtractor);
 
 /** @type {import('commandkit').CommandData} */
 const data = new SlashCommandBuilder()
