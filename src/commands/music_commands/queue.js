@@ -24,7 +24,7 @@ async function run({interaction, client}) {
 
     const queueString = queue.tracks.map((song, i) =>{
         const User = client.guilds.cache.get(process.env.GUILD_ID).members.cache.get(song.requestedBy.id).user
-        return `${i + 1})` + `\`[${song.duration}]\` ${song.title} - ${User}`;
+        return `${i + 1})` + `\`[${song.duration}]\` ${song.title} - by ${song.author} - ${User}`;
     }).join('\n');
 
     const currentSong = queue.currentTrack;
@@ -34,7 +34,7 @@ async function run({interaction, client}) {
         embeds: [
             new EmbedBuilder()
                 .setDescription(`**Currently Playing**\n` + 
-                (currentSong ? ` \`[${currentSong.duration}]\` ${currentSong.title} - ${User}` : "None") +
+                (currentSong ? ` \`[${currentSong.duration}]\` ${currentSong.title} - by ${currentSong.author} - ${User}` : "None") +
                 `\n\n**Queue**\n${queueString}`)
                 .setThumbnail(currentSong.thumbnail)
         ]

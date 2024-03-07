@@ -76,6 +76,9 @@ async function run ({interaction, client}){
 
         const embed = new EmbedBuilder()
             .setDescription(`added **[${song.title}](${song.url})** to the queue`)
+            .addFields(
+                {name: 'author', value: `${song.author}`}
+            )
             .setThumbnail(song.thumbnail)
             .setFooter({text: `Duration: ${song.duration}`})
         await interaction.reply({ embeds: [embed] })
@@ -98,6 +101,9 @@ async function run ({interaction, client}){
         
         const embed = new EmbedBuilder()
             .setDescription(`added **[${playlist.title}](${playlist.url})** to the queue`)
+            .addFields(
+                {name: 'author', value: `${playlist.author}`}
+            )
             .setThumbnail(playlist.thumbnail)
             .setFooter({text: `Duration: ${playlist.duration}`})
         await interaction.reply({ embeds: [embed] })
@@ -120,6 +126,9 @@ async function run ({interaction, client}){
 
         const embed = new EmbedBuilder()
             .setDescription(`added **[${song.title}](${song.url})** to the queue`)
+            .addFields(
+                {name: 'author', value: `${song.author}`}
+            )
             .setThumbnail(song.thumbnail)
             .setFooter({text: `Duration: ${song.duration}`})
         await interaction.reply({ embeds: [embed] })
