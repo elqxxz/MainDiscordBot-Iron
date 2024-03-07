@@ -4,6 +4,7 @@ const {Routes} = require('discord-api-types/v9');
 const {Player} = require('discord-player')
 const {CommandKit} = require('commandkit');
 
+
 const OptionsData = require('../src/data/GraberOptions.json');
 
 const client = new Client({ 
@@ -39,31 +40,63 @@ client.player = new Player(client, {
 
 client.on('messageCreate', (message) => {
     if (message.author.bot) return;
+    const MessageLog = new EmbedBuilder()
+    const LogChannel = client.guilds.cache.get(process.env.GUILD_ID).channels.cache.get(process.env.LOG_CHANNEL);
+    
+    console.log(Boolean(message.attachments.size));
+    if (message.attachments.size && !message.content) {
+        LogChannel.send({embeds: [
+            MessageLog
+                .setTitle('Interaction Log')
+                .setFields(
+                    {name: 'Channel', value: `${message.channel}`},
+                    {name: 'Author', value: `${message.author}`},
+                  )
+                .setImage(message.attachments.first().url)
+                .setThumbnail(message.guild.iconURL())
+        ]});
+    } else if (message.attachments.size && message.content){
+        LogChannel.send({embeds: [
+            MessageLog
+                .setTitle('Interaction Log')
+                .setFields(
+                    {name: 'Channel', value: `${message.channel}`},
+                    {name: 'Author', value: `${message.author}`},
+                    {name: 'Content', value: `${message.content}`}
+                  )
+                .setImage(message.attachments.first().url)
+                .setThumbnail(message.guild.iconURL())
+        ]});
+    }else {
+        console.log(message.guild.iconURL())
+        LogChannel.send({embeds: [
+            MessageLog
+              .setTitle('Interaction Log')
+              .setFields(
+                {name: 'Channel', value: `${message.channel}`},
+                {name: 'Author', value: `${message.author}`},
+                {name: 'Content', value: `${message.content}`}
+              )
+              .setThumbnail(message.guild.iconURL())
+        ]});
+    }
 });
 client.on('interactionCreate', async (interaction) => {
-
     //discord log in channel
+    const CommandsThatCanBeLogged = ['ping', 'help']  //there you need to add new commands if you created them:  EXAMPLE --  const CommandsThatCanBeLogged = ['ping', 'help', 'info', 'ban' ] etc
+
     const LogChannel = client.guilds.cache.get(process.env.GUILD_ID).channels.cache.get(process.env.LOG_CHANNEL);
-    if (interaction.commandName == 'ping' || interaction.commandName == 'help'){
-        const LoggedReply = await interaction.fetchReply();
-        var BotReply = null;
-        if (LoggedReply.content == ''){
-            BotReply = 'Embed';
-        } else {
-            BotReply = LoggedReply.content;
-        }
+    if (CommandsThatCanBeLogged.includes(interaction.commandName)) {
 
         const InterLogEmbed = new EmbedBuilder()
          .setTitle('Interaction Log')
          .addFields(
-             {name:'Author', value:`${interaction.user}`},
-             {name:'Interacted with', value:`${interaction.commandName}`},
-         );
-
+            {name:'Where command used', value:`${interaction.channel}`},
+            {name:'Author', value:`${interaction.user}`},
+            {name:'Interacted with', value:`/${interaction.commandName}`},
+         )
+         .setThumbnail(interaction.guild.iconURL());
         LogChannel.send({embeds: [InterLogEmbed]});
-    }
-    else if (interaction.commandName == 'get-avatar') {
-        console.log('get-avatar is used')
     }
 
     //Get-avatar autocomplete
@@ -87,6 +120,7 @@ client.on('ready', ()=> {
 })
 client.on('error', error => {
     console.error('The WebSocket encountered an error:', error);
+    interaction.reply({content: `ERROR: try once more`, ephemeral: true});
 });
 
 client.login(process.env.TOKEN)

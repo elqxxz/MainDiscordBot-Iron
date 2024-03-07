@@ -1,0 +1,35 @@
+{
+  "name": "maindisocrdbot-iron",
+  "version": "0.0.0",
+  "description": "Main discord bot for my discord server.",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elqxxz/PrivateDiscordBot-Iron.git"
+  },
+  "author": "sinaee (kyoto2225)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elqxxz/PrivateDiscordBot-Iron/issues"
+  },
+  "homepage": "https://github.com/elqxxz/PrivateDiscordBot-Iron#readme",
+  "dependencies": {
+    "@discord-player/extractor": "^4.4.6",
+    "@discordjs/builders": "^1.7.0",
+    "@discordjs/opus": "^0.9.0",
+    "@discordjs/rest": "^2.2.0",
+    "@discordjs/voice": "^0.16.1",
+    "axios": "^1.6.7",
+    "commandkit": "^0.1.10",
+    "discord-api-types": "^0.37.71",
+    "discord-player": "^6.6.7",
+    "discord.js": "^14.14.1",
+    "ffmpeg-static": "^5.2.0",
+    "node-fetch": "^3.3.2",
+    "play-dl": "^1.9.7"
+  }
+}

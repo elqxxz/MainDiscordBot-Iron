@@ -34,70 +34,96 @@ const data = {
 
 /** @param {import('commandkit').SlashCommandProps} param0 */
 async function run({interaction}) {
-    const LogChannel = client.guilds.cache.get(process.env.GUILD_ID).channels.cache.get(process.env.LOG_CHANNEL);
+    client.on('error', error => {
+        console.error('The WebSocket encountered an error:', error);
+    });
+    
+    const LogChannel = client.channels.cache.get(process.env.LOG_CHANNEL)
     const interactingUser = interaction.user.globalName;
-    const interTargetID = interaction.options.get('user').value;
-    const interTargetCache = interaction.guild.members.cache.get(interTargetID);
-
+    const interTargetID = await interaction.options.getUser('user').fetch();
+    const interTargetCache = interaction.guild.members.cache.get(interaction.options.get('user').value);
 
     if (!interaction.isChatInputCommand()) return;
-        console.log(`--- ${interactingUser} has used the grabber on ${interTargetCache.displayName} ---`);
-        console.log(`avatar id: ${interTargetCache.user.avatar}`);
-
-    const guild = await client.guilds.fetch(process.env.GUILD_ID);
-    const Fetched = guild.members.fetch(interTargetID);
-
-    const interTargetAvatar = interTargetCache.user.avatar;
-    const interTargetBanner = (await Fetched).user.banner;
-        console.log(`banner id: ${interTargetBanner}`);
-        //console.log(Fetched)
+    console.log(`--- ${interactingUser} has used the grabber on ${interTargetID.displayName} ---`);
+    console.log(`avatar id: ${interTargetID.avatar}`);
+    console.log(`banner id: ${interTargetID.bannerURL()}`);
+    console.log('-------------------------------------------------------------------------------')
 
     const interTargetType = interaction.options.getString('type');
     const type = OptionsData.find((option) => option.id === interTargetType);
 
     const SuccessAvatarEmbed = new EmbedBuilder()
      .setTitle("Success")
-     .setImage(`https://cdn.discordapp.com/avatars/${interTargetID}/${interTargetAvatar}`)
-     .setDescription(`${interTargetCache.user.displayName}'s avatar grabbed`)
+     .setThumbnail(interTargetID.avatarURL({dynamic: true, size: 4096}))
+     .setDescription(`${interTargetCache.user}'s avatar grabbed`)
      .setColor(5763719);
 
     const SuccessBannerEmbed = new EmbedBuilder()
      .setTitle("Success")
-     .setImage(`https://cdn.discordapp.com/banners/${interTargetID}/${interTargetBanner}`)
-     .setDescription(`${interTargetCache.user.displayName}'s banner grabbed`)
+     .setImage(interTargetID.bannerURL({dynamic: true, size: 4096}))
+     .setDescription(`${interTargetCache.user}'s banner grabbed`)
      .setColor(5763719);
 
     const ErrorEmbed = new EmbedBuilder()
      .setTitle("Error")
-     .setDescription(`${interTargetCache.user.displayName} doesn't have an avatar or banner`)
+     .setDescription(`${interTargetCache.user} doesn't have an avatar or banner`)
      .setColor(15548997);
     
     const GetAvatarEmbed = new EmbedBuilder()
-     .setTitle('Graber Log')
-     .setFields(
-         {name:'Author', value:`${interaction.user}`},
-         {name:'What user got', value:`${type.name}`},
-         {name:'Grabbed from', value:`${interTargetCache.user}`}
-     );
+
 
     if (type.name === 'avatar') {
             console.log(`interacted with avatar\n-------------------------------------------------`)
         interaction.reply({ embeds: [SuccessAvatarEmbed], ephemeral: true })
         
-        LogChannel.send({embeds: [GetAvatarEmbed]})
+        LogChannel.send({embeds: [
+            GetAvatarEmbed
+                .setTitle('Graber Log')
+                .setFields(
+                    {name:'Where command used', value:`${interaction.channel}`},
+                    {name:'Author', value:`${interaction.user}`},
+                    {name:'What user choosed', value:`${type.name}`},
+                    {name:'Grabbed from', value:`${interTargetCache.user}`}
+                )
+                .setThumbnail(interaction.guild.iconURL())
+                .setImage(interTargetID.avatarURL({dynamic: true, size: 4096}))
+        ]})
         return;
-    } else if (type.name === 'banner' && interTargetBanner !== undefined) {
+    } else if (type.name === 'banner' && interTargetID.banner !== (undefined || null) ) {
             console.log(`interacted with banner\n-------------------------------------------------`);
         interaction.reply({ embeds: [SuccessBannerEmbed], ephemeral: true });
         
-        LogChannel.send({embeds: [GetAvatarEmbed]})
+        LogChannel.send({embeds: [
+            GetAvatarEmbed
+                .setTitle('Graber Log')
+                .setFields(
+                    {name:'Where command used', value:`${interaction.channel}`},
+                    {name:'Author', value:`${interaction.user}`},
+                    {name:'What user choosed', value:`${type.name}`},
+                    {name:'Grabbed from', value:`${interTargetCache.user}`}
+                )
+                .setThumbnail(interaction.guild.iconURL())
+                .setImage(interTargetID.bannerURL({dynamic: true, size: 4096}))
+        ]})
         return;
     } 
     else {
             console.log(`-------------------------------------------------`)
         interaction.reply({ embeds: [ErrorEmbed], ephemeral: true });
         
-        LogChannel.send({embeds: [GetAvatarEmbed]})
+        LogChannel.send({embeds: [
+            GetAvatarEmbed
+                .setTitle('Graber Log')
+                .setFields(
+                    {name:'Where command used', value:`${interaction.channel}`},
+                    {name:'Author', value:`${interaction.user}`},
+                    {name:'What user choosed', value:`${type.name}`},
+                    {name:'Content', value:`user have no banner`},
+                    {name:'Grabbed from', value:`${interTargetCache.user}`}
+                )
+                .setThumbnail(interaction.guild.iconURL())
+        ]})
+        return;
     };
 
 };

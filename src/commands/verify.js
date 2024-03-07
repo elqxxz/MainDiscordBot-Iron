@@ -37,8 +37,8 @@ async function run ({interaction, client}){
   // Embeds
   const SuccessEmbed = new EmbedBuilder()
     .setTitle("Verification")
-    .setImage(`https://cdn.discordapp.com/avatars/${interTargetID}/${interUserAvatar}`)
-    .setDescription(`${interTargetCache.user} has been verified!`)
+    .setThumbnail(`https://cdn.discordapp.com/avatars/${interTargetID}/${interUserAvatar}`)
+    .setDescription(`${interTargetCache.user} has been verified! \n\n verifier: ${interaction.user}`)
     .setColor(5763719);
 
   const RemovedEmbed = new EmbedBuilder()
@@ -163,11 +163,13 @@ async function run ({interaction, client}){
       const SelectorEmbed = new EmbedBuilder()
       .setTitle('Verify Log')
       .addFields(
+        {name: 'Where command used', value: `${interaction.channel}`},
         {name:'Author', value:`${interaction.user}`},
-        {name:'Selected', value:`${selectedRole}`},
         {name:'Verify target', value: `${interTargetCache.user}`},
+        {name:'Selected', value:`${selectedRole}`},
         {name:'Result', value:`${VerifyResult}`}
       )
+      .setThumbnail(interaction.guild.iconURL())
 
       LogChannel.send({embeds: [SelectorEmbed]});
     };
