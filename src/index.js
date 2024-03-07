@@ -48,7 +48,7 @@ client.on('messageCreate', (message) => {
             MessageLog
                 .setTitle('Interaction Log')
                 .setFields(
-                    {name: 'Channel', value: `${message.channel}`},
+                    {name: 'Where command used', value: `${message.channel}`},
                     {name: 'Author', value: `${message.author}`},
                   )
                 .setImage(message.attachments.first().url)
@@ -59,7 +59,7 @@ client.on('messageCreate', (message) => {
             MessageLog
                 .setTitle('Interaction Log')
                 .setFields(
-                    {name: 'Channel', value: `${message.channel}`},
+                    {name: 'Where command used', value: `${message.channel}`},
                     {name: 'Author', value: `${message.author}`},
                     {name: 'Content', value: `${message.content}`}
                   )
@@ -72,7 +72,7 @@ client.on('messageCreate', (message) => {
             MessageLog
               .setTitle('Interaction Log')
               .setFields(
-                {name: 'Channel', value: `${message.channel}`},
+                {name: 'Where command used', value: `${message.channel}`},
                 {name: 'Author', value: `${message.author}`},
                 {name: 'Content', value: `${message.content}`}
               )

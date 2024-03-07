@@ -11,6 +11,11 @@ const data = {
 async function run({interaction, client}){
     const HelpEmbed = new EmbedBuilder()
      .setTitle('Contact to solve any problem with bot')
+     .addFields(
+        {name: '**Main**', value: `\`/help\n/get-avatar\``},
+        {name: '**Music**', value: `\`/play\n/pause\n/resume\n/queue\n/skip\n/exit\``},
+        {name: '**Moderation commands**', value: `\`/ping\n/verify\``},
+     )
      .setURL('https://t.me/sinaeeosko')
      .setColor(2895667);
 
