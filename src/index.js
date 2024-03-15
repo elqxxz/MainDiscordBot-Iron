@@ -1,6 +1,5 @@
 require('dotenv').config();
 const {Client, IntentsBitField, EmbedBuilder} = require('discord.js');
-const {Routes} = require('discord-api-types/v9');
 const {Player} = require('discord-player')
 const {CommandKit} = require('commandkit');
 
@@ -39,51 +38,6 @@ client.player = new Player(client, {
 
 client.on('messageCreate', (message) => {
     if (message.author.bot) return;
-    console.log(message);
-
-    const MessageTypesBlock = [6, 21]
-    if (MessageTypesBlock.includes(message.type)) return;
-    
-    const MessageLog = new EmbedBuilder()
-    const LogChannel = client.guilds.cache.get(process.env.GUILD_ID).channels.cache.get(process.env.LOG_CHANNEL);
-    
-    console.log(Boolean(message.attachments.size));
-    if (message.attachments.size && !message.content) {
-        LogChannel.send({embeds: [
-            MessageLog
-                .setTitle('Interaction Log')
-                .setFields(
-                    {name: 'Where command used', value: `${message.guild.name} - ${message.channel.name}: ${message.channel}`},
-                    {name: 'Author', value: `${message.author.displayName}: ${message.author}`},
-                  )
-                .setImage(message.attachments.first().url)
-                .setThumbnail(message.guild.iconURL())
-        ]});
-    } else if (message.attachments.size && message.content){
-        LogChannel.send({embeds: [
-            MessageLog
-                .setTitle('Interaction Log')
-                .setFields(
-                    {name: 'Where command used', value: `${message.guild.name} - ${message.channel.name}: ${message.channel}`},
-                    {name: 'Author', value: `${message.author.displayName}: ${message.author}`},
-                    {name: 'Content', value: `${message.content}`}
-                  )
-                .setImage(message.attachments.first().url)
-                .setThumbnail(message.guild.iconURL())
-        ]});
-    }else {
-        console.log(message.guild.iconURL())
-        LogChannel.send({embeds: [
-            MessageLog
-              .setTitle('Interaction Log')
-              .setFields(
-                {name: 'Where command used', value: `${message.guild.name} - ${message.channel.name}: ${message.channel}`},
-                {name: 'Author', value: `${message.author.displayName}: ${message.author}`},
-                {name: 'Content', value: `${message.content}`}
-              )
-              .setThumbnail(message.guild.iconURL())
-        ]});
-    }
 });
 client.on('interactionCreate', async (interaction) => {
     //discord log in channel
@@ -95,8 +49,8 @@ client.on('interactionCreate', async (interaction) => {
         const InterLogEmbed = new EmbedBuilder()
          .setTitle('Interaction Log')
          .addFields(
-            {name:'Where command used', value:`${interaction.channel}`},
-            {name:'Author', value:`${interaction.user}`},
+            {name: 'Where command used', value: `${interaction.guild.name} - ${interaction.channel.name}: ${interaction.channel}`},
+            {name: 'Author', value: `${interaction.user.displayName}: ${interaction.user}`},
             {name:'Interacted with', value:`/${interaction.commandName}`},
          )
          .setThumbnail(interaction.guild.iconURL());

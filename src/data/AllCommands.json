@@ -1,0 +1,15 @@
+[
+    { "id": "", "name": "help", "description": "basic" },
+    { "id": "", "name": "get-avatar", "description": "basic" },
+    { "id": "", "name": "ping", "description": "admin" },
+    { "id": "", "name": "verify", "description": "admin" },
+
+    { "id": "", "name": "play search", "description": "music" },
+    { "id": "", "name": "play songurl", "description": "music" },
+    { "id": "", "name": "play playlist", "description": "music" },
+    { "id": "", "name": "exit", "description": "music" },
+    { "id": "", "name": "pause", "description": "music" },
+    { "id": "", "name": "resume", "description": "music" },
+    { "id": "", "name": "skip", "description": "music" },
+    { "id": "", "name": "queue", "description": "music" }
+]

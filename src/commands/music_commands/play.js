@@ -1,10 +1,10 @@
 const {EmbedBuilder, SlashCommandBuilder} = require('discord.js');
 const {QueryType} = require('discord-player');
-const {SpotifyExtractor} = require("@discord-player/extractor");
+const {YouTubeExtractor} = require("@discord-player/extractor");
 const { useMainPlayer } = require('discord-player');
 const player = useMainPlayer();
 
-player.extractors.register(SpotifyExtractor);
+player.extractors.register(YouTubeExtractor);
 
 /** @type {import('commandkit').CommandData} */
 const data = new SlashCommandBuilder()
@@ -34,7 +34,7 @@ const data = new SlashCommandBuilder()
 )
 .addSubcommand(subcommand => 
     subcommand
-      .setName('song')
+      .setName('songurl')
       .setDescription('plays song from YT')
       .addStringOption(option => 
          option
@@ -56,7 +56,7 @@ async function run ({interaction, client}){
 
     if (!queue.connection) await queue.connect(interaction.member.voice.channel)
 
-    if (interaction.options.getSubcommand() === 'song') {
+    if (interaction.options.getSubcommand() === 'songurl') {
         let url = interaction.options.getString('url');
 
         const result = await player.search(url, {
@@ -113,7 +113,7 @@ async function run ({interaction, client}){
 
         const result = await player.search(url, {
             requestedBy: interaction.user,
-            searchEngine: QueryType.AUTO,
+            searchEngine: QueryType.SPOTIFY_SEARCH,
         })
 
         if (result.tracks.length === 0) {
